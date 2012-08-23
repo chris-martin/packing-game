@@ -4,7 +4,7 @@ import processing.core.PVector;
 
 import java.awt.*;
 
-public interface Canvas {
+interface Canvas {
 
   void fill(Color color);
 

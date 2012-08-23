@@ -25,6 +25,9 @@ public class Main extends PApplet {
     disks = new Disks();
     disks.add();
     disks.add();
+    disks.add();
+    disks.add();
+    disks.add();
     mouse_manager.add(disks);
   }
 
