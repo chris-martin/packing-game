@@ -34,10 +34,16 @@ class Disks implements DragHandler, LoopController {
 
   void drag(DragInfo drag_info) {
     if (dragging_disk != null) {
-      dragging_disk.center = PVector.add(
+      /*desired_center = PVector.add(
         dragging_disk_start,
         drag_info.drag_diff()
       );
+      Disk hypothetical = new Disk();
+      hypothetical.radius = d.radius;
+      hypothetical.center = desired_center;
+      PVector push = new PVector(0, 0);
+      while (PVector.)
+      dragging_disk.center = desired_center + push;*/
     }
   }
 
