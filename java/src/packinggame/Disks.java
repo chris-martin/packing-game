@@ -4,7 +4,10 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 class Disks implements DragHandler, LoopController {
 
@@ -69,6 +72,51 @@ class Disks implements DragHandler, LoopController {
     return false;
   }
 
+  Iterator<PVector> offset_iterator(Disk dragging_disk) {
+
+    class Circle {
+
+      PVector center;
+      float radius;
+
+      List<PVector> intersection(Circle o) {
+
+      }
+
+    }
+
+    List<Circle> circles = newArrayList();
+    for (Disk d : disks) {
+      if (d != dragging_disk) {
+        Circle c = new Circle();
+        c.center = d.center;
+        c.radius = d.radius + dragging_disk.radius;
+        circles.add(c);
+      }
+    }
+
+    return new Iterator<PVector>() {
+
+      @Override
+      public boolean hasNext() {
+        return false;
+      }
+
+      @Override
+      public PVector next() {
+        return null;
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+
+    };
+  }
+
+/*
+
   Iterator<PVector> offset_iterator(final float r_max) {
     return new Iterator<PVector>() {
 
@@ -114,5 +162,6 @@ class Disks implements DragHandler, LoopController {
 
     };
   }
+*/
 
 }
