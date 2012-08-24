@@ -5,6 +5,10 @@ import processing.core.PApplet;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 class Circle {
 
   P2 center;
@@ -22,23 +26,36 @@ class Circle {
     return intersect(this, that);
   }
 
+  // http://paulbourke.net/geometry/2circle/
   static List<P2> intersect(Circle i, Circle j) {
-    if (!i.overlaps(j)) {
-      return ImmutableList.of();
-    }
-    final float z = P2.dist(i.center, j.center);
-    final float beta = i.radius / j.radius;
-    final float alpha = (float) Math.pow(beta, 2);
-    final float x_j = z / (1 + alpha);
-    System.out.println(x_j);
-    final float y = x_j * beta;
-    System.out.println(y);
-    final P2 v_direction = i.center.sub(j.center).normalize();
-    System.out.println(v_direction);
-    final P2 v = v_direction.scaleTo(x_j);
-    final P2 u_1 = v_direction.rotate(PApplet.HALF_PI).mult(y).add(v).add(j.center);
-    final P2 u_2 = v_direction.rotate(PApplet.HALF_PI * -1).mult(y).add(v).add(j.center);
-    return ImmutableList.of(u_1, u_2);
+
+    float d = P2.dist(i.center, j.center);
+
+    // circles are separate
+    if (d > i.radius + j.radius) return ImmutableList.of();
+
+    // one circle contains the other
+    if (d < abs(i.radius - j.radius)) return ImmutableList.of();
+
+    // circles are identica;
+    if (d == 0 && i.radius == j.radius) return ImmutableList.of();
+
+    float a = (float) (pow(i.radius, 2) - pow(j.radius, 2) + pow(d, 2)) / (2 * d);
+
+    float h = (float) sqrt(pow(i.radius, 2) - pow(a, 2));
+
+    P2 m = i.center.add(j.center.sub(i.center).mult(a).mult(1/d));
+
+    return ImmutableList.of(
+        new P2(
+            m.x + h * (j.center.y - i.center.y) / d,
+            m.y - h * (j.center.x - i.center.x) / d
+        ),
+        new P2(
+            m.x - h * (j.center.y - i.center.y) / d,
+            m.y + h * (j.center.x - i.center.x) / d
+        )
+    );
   }
 
 }
