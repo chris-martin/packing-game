@@ -1,5 +1,7 @@
 package packinggame;
 
+import packinggame.loop.LoopRequestAggregator;
+import packinggame.loop.Looping;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -13,16 +15,15 @@ public class Main extends PApplet {
 
   Disks disks;
   MouseManager mouse_manager;
-  LoopManager loop_manager;
+  LoopRequestAggregator loop_request = Looping.aggregator(Looping.papplet(this));
 
   @Override public void setup() {
     size(window_width, window_height);
 
-    loop_manager = new LoopManager(this);
-    mouse_manager = new MouseManager(this, loop_manager);
-    loop_manager.add(mouse_manager);
+    mouse_manager = new MouseManager(this);
 
     disks = new Disks();
+    disks.loop_request = loop_request.newLoopRequest();
     disks.add();
     disks.add();
     disks.add();

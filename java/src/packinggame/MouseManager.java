@@ -1,21 +1,19 @@
 package packinggame;
 
+import packinggame.loop.LoopRequest;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 
-class MouseManager
-    implements LoopController, DragInfo {
+class MouseManager implements DragInfo {
 
   PVector drag_start;
   final ArrayList<DragHandler> drag_handlers = new ArrayList<DragHandler>();
-  final LoopManager loop_manager;
   final PApplet applet;
 
-  MouseManager(PApplet applet, LoopManager loop_manager) {
+  MouseManager(PApplet applet) {
     this.applet = applet;
-    this.loop_manager = loop_manager;
   }
 
   void add(Object x) {
@@ -29,7 +27,6 @@ class MouseManager
     for (DragHandler x : drag_handlers) {
       x.press(drag_start);
     }
-    loop_manager.maybe_loop();
   }
 
   void release() {
@@ -38,18 +35,12 @@ class MouseManager
       x.release(mouse);
     }
     drag_start = null;
-    loop_manager.maybe_loop();
   }
 
   void drag() {
     for (DragHandler x : drag_handlers) {
       x.drag(this);
     }
-    loop_manager.maybe_loop();
-  }
-
-  @Override public boolean loop() {
-    return Looping.check_loop(drag_handlers);
   }
 
   @Override public PVector drag_start() {
