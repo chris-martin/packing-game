@@ -14,6 +14,13 @@ class Circle {
   P2 center;
   float radius;
 
+  Circle withRadius(float radius) {
+    Circle c = new Circle();
+    c.center = center;
+    c.radius = radius;
+    return c;
+  }
+
   boolean contains(P2 p) {
     return p.dist(center) < radius;
   }

@@ -2,6 +2,7 @@ package packinggame;
 
 import packinggame.loop.LoopRequest;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +11,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 class Disks implements DragHandler {
 
-  final float padding = .0001f;
+  final float padding = .001f;
 
   LoopRequest loop_request;
 
@@ -110,25 +111,38 @@ class Disks implements DragHandler {
         Circle overlap = overlaps.get(0);
         P2 v = dragging_disk.center.sub(overlap.center)
             .normalize().mult(overlap.radius);
-        v = v.scaleTo(v.mag() + padding).add(overlap.center);
+        v = v.scaleTo(v.mag()).add(overlap.center);
         dragging_disk.center = v;
         if (get_overlaps().size() == 0) {
           return;
         }
       }
 
-      P2 p_min = null;
-      float dist_min = Float.MAX_VALUE;
-      for (P2 p : boundary_intersections) {
-        float dist = p.dist(ghost_disk.center);
-        if (dist < dist_min) {
-          dist_min = dist;
-          p_min = p;
+      class PointWithDistance implements Comparable<PointWithDistance> {
+
+        P2 p;
+        float d;
+
+        @Override
+        public int compareTo(PointWithDistance o) {
+          if (d == o.d) return 0;
+          return d > o.d ? 1 : -1;
         }
+
       }
-      if (p_min != null) {
-        dragging_disk.center = p_min;
-        return;
+      List<PointWithDistance> points = newArrayList();
+      for (P2 p : boundary_intersections) {
+        PointWithDistance pwd = new PointWithDistance();
+        pwd.p = p;
+        pwd.d = p.dist(ghost_disk.center);
+        points.add(pwd);
+      }
+      Collections.sort(points);
+      for (PointWithDistance pwd : points) {
+        dragging_disk.center = pwd.p;
+        if (get_overlaps().size() == 0) {
+          return;
+        }
       }
 
       dragging_disk.center = null;
@@ -140,7 +154,7 @@ class Disks implements DragHandler {
     List<Circle> overlaps = newArrayList();
     if (dragging_disk != null) {
       for (Circle c : overlap_boundaries) {
-        if (c.contains(dragging_disk.center)) {
+        if (c.withRadius(c.radius - padding).contains(dragging_disk.center)) {
           overlaps.add(c);
         }
       }
