@@ -19,6 +19,7 @@ public class Main extends PApplet {
 
   @Override public void setup() {
     size(window_width, window_height);
+    smooth();
 
     mouse_manager = new MouseManager(this);
 
@@ -60,15 +61,26 @@ public class Main extends PApplet {
     }
 
     @Override
+    public void stroke(Color color) {
+      Main.this.stroke(color.getRGB());
+    }
+
+    @Override
     public void circle(PVector center, float radius) {
       float diameter = 2 * radius;
       Main.this.ellipse(center.x, center.y, diameter, diameter);
     }
 
     @Override
-    public void circle(Color color, PVector center, float radius) {
-      fill(color);
+    public void circle(PVector center, float radius, Color fill) {
+      fill(fill);
       circle(center, radius);
+    }
+
+    @Override
+    public void circle(PVector center, float radius, Color fill, Color stroke) {
+      stroke(stroke);
+      circle(center, radius, fill);
     }
 
   };

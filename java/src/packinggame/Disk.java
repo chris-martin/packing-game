@@ -12,11 +12,17 @@ class Disk {
   boolean ghost;
 
   void draw(Canvas canvas) {
-    Color c = this.c;
-    if (ghost) {
-      c = new Color(c.getRed(), c.getGreen(), c.getBlue(), 30);
+    if (c != null && center != null) {
+      Color c = this.c;
+      Color stroke;
+      if (ghost) {
+        c = new Color(c.getRed(), c.getGreen(), c.getBlue(), 30);
+        stroke = Color.black;
+      } else {
+        stroke = c.darker().darker();
+      }
+      canvas.circle(center, radius, c, stroke);
     }
-    canvas.circle(c, center, radius);
   }
 
   boolean contains(PVector p) {

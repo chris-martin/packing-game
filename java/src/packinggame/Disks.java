@@ -11,6 +11,8 @@ import static com.google.common.collect.Lists.newArrayList;
 
 class Disks implements DragHandler {
 
+  final float padding = .0001f;
+
   LoopRequest loop_request;
 
   DiskFactory factory = new DiskFactory();
@@ -72,11 +74,16 @@ class Disks implements DragHandler {
   }
 
   @Override public void release(PVector mouse) {
-    stationary_disks.add(dragging_disk);
-    dragging_disk = null;
-    dragging_disk_start = null;
-    ghost_disk = null;
-    overlap_boundaries.clear();
+    if (dragging_disk != null) {
+      if (dragging_disk.center == null) {
+        dragging_disk.center = dragging_disk_start;
+      }
+      stationary_disks.add(dragging_disk);
+      dragging_disk = null;
+      dragging_disk_start = null;
+      ghost_disk = null;
+      overlap_boundaries.clear();
+    }
   }
 
   @Override public void drag(DragInfo drag_info) {
@@ -92,10 +99,14 @@ class Disks implements DragHandler {
           PVector v = PVector.sub(dragging_disk.center, overlap.center);
           v.normalize();
           v.mult(overlap.radius);
+          v.scaleTo(v.mag() + padding);
           v.add(overlap.center);
           dragging_disk.center = v;
+          if (get_overlaps().size() != 0) {
+            dragging_disk.center = null;
+          }
         } else {
-          dragging_disk.center = new PVector(0, 0);
+          dragging_disk.center = null;
         }
       }
     }
