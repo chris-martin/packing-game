@@ -1,7 +1,6 @@
 package packinggame;
 
 import packinggame.loop.LoopRequest;
-import processing.core.PVector;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,9 +19,10 @@ class Disks implements DragHandler {
   Set<Disk> stationary_disks = new HashSet<Disk>();
 
   List<Circle> overlap_boundaries = newArrayList();
+  List<P2> boundary_intersections = newArrayList();
 
   Disk dragging_disk;
-  PVector dragging_disk_start;
+  P2 dragging_disk_start;
 
   Disk ghost_disk;
 
@@ -44,7 +44,7 @@ class Disks implements DragHandler {
     }
   }
 
-  @Override public void press(PVector mouse) {
+  @Override public void press(P2 mouse) {
     dragging_disk = at_position(mouse);
     if (dragging_disk != null) {
       dragging_disk_start = dragging_disk.center;
@@ -55,6 +55,13 @@ class Disks implements DragHandler {
         c.radius = disk.radius + dragging_disk.radius;
         overlap_boundaries.add(c);
       }
+      for (int i = 0; i < overlap_boundaries.size(); i++) {
+        Circle I = overlap_boundaries.get(i);
+        for (int j = 0; j < i; j++) {
+          Circle J = overlap_boundaries.get(j);
+          boundary_intersections.addAll(I.intersect(J));
+        }
+      }
       ghost_disk = new Disk();
       ghost_disk.ghost = true;
       ghost_disk.c = dragging_disk.c;
@@ -64,7 +71,7 @@ class Disks implements DragHandler {
     }
   }
 
-  Disk at_position(PVector p) {
+  Disk at_position(P2 p) {
     for (Disk d : stationary_disks) {
       if (d.contains(p)) {
         return d;
@@ -73,7 +80,7 @@ class Disks implements DragHandler {
     return null;
   }
 
-  @Override public void release(PVector mouse) {
+  @Override public void release(P2 mouse) {
     if (dragging_disk != null) {
       if (dragging_disk.center == null) {
         dragging_disk.center = dragging_disk_start;
@@ -83,32 +90,39 @@ class Disks implements DragHandler {
       dragging_disk_start = null;
       ghost_disk = null;
       overlap_boundaries.clear();
+      boundary_intersections.clear();
     }
   }
 
   @Override public void drag(DragInfo drag_info) {
     if (dragging_disk != null) {
-      ghost_disk.center = dragging_disk.center = PVector.add(
-        dragging_disk_start,
-        drag_info.drag_diff()
-      );
+      ghost_disk.center = dragging_disk.center = dragging_disk_start.add(drag_info.drag_diff());
       List<Circle> overlaps = get_overlaps();
-      if (overlaps.size() != 0) {
-        if (overlaps.size() == 1) {
-          Circle overlap = overlaps.get(0);
-          PVector v = PVector.sub(dragging_disk.center, overlap.center);
-          v.normalize();
-          v.mult(overlap.radius);
-          v.scaleTo(v.mag() + padding);
-          v.add(overlap.center);
-          dragging_disk.center = v;
-          if (get_overlaps().size() != 0) {
-            dragging_disk.center = null;
-          }
-        } else {
-          dragging_disk.center = null;
+
+      // No overlaps
+      if (overlaps.size() == 0) {
+        return;
+      }
+
+      // A single overlap where we can simply move
+      // to the closest edge of the overlapped disk
+      if (overlaps.size() == 1) {
+        Circle overlap = overlaps.get(0);
+        P2 v = dragging_disk.center.sub(overlap.center)
+            .normalize().mult(overlap.radius);
+        v = v.scaleTo(v.mag() + padding).add(overlap.center);
+        dragging_disk.center = v;
+        if (get_overlaps().size() == 0) {
+          return;
         }
       }
+
+      if (overlaps.size() == 2) {
+
+      }
+
+      dragging_disk.center = null;
+
     }
   }
 

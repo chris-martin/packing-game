@@ -1,13 +1,11 @@
 package packinggame;
 
-import processing.core.PVector;
-
 import java.awt.*;
 
 class Disk {
 
   Color c;
-  PVector center;
+  P2 center;
   float radius;
   boolean ghost;
 
@@ -25,7 +23,7 @@ class Disk {
     }
   }
 
-  boolean contains(PVector p) {
+  boolean contains(P2 p) {
     return p.dist(center) < radius;
   }
 

@@ -1,10 +1,8 @@
 package packinggame;
 
-import processing.core.PVector;
-
 interface DragInfo {
 
-  PVector drag_start();
-  PVector drag_diff();
+  P2 drag_start();
+  P2 drag_diff();
 
 }

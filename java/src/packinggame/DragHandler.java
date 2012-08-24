@@ -1,9 +1,7 @@
 package packinggame;
 
-import processing.core.PVector;
-
 interface DragHandler {
-  void press(PVector mouse);
-  void release(PVector mouse);
+  void press(P2 mouse);
+  void release(P2 mouse);
   void drag(DragInfo drag_info);
 }

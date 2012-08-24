@@ -3,7 +3,6 @@ package packinggame;
 import packinggame.loop.LoopRequestAggregator;
 import packinggame.loop.Looping;
 import processing.core.PApplet;
-import processing.core.PVector;
 
 import java.awt.*;
 
@@ -66,19 +65,19 @@ public class Main extends PApplet {
     }
 
     @Override
-    public void circle(PVector center, float radius) {
+    public void circle(P2 center, float radius) {
       float diameter = 2 * radius;
       Main.this.ellipse(center.x, center.y, diameter, diameter);
     }
 
     @Override
-    public void circle(PVector center, float radius, Color fill) {
+    public void circle(P2 center, float radius, Color fill) {
       fill(fill);
       circle(center, radius);
     }
 
     @Override
-    public void circle(PVector center, float radius, Color fill, Color stroke) {
+    public void circle(P2 center, float radius, Color fill, Color stroke) {
       stroke(stroke);
       circle(center, radius, fill);
     }

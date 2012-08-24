@@ -10,10 +10,10 @@ interface Canvas {
 
   void stroke(Color stroke);
 
-  void circle(PVector center, float radius);
+  void circle(P2 center, float radius);
 
-  void circle(PVector center, float radius, Color fill);
+  void circle(P2 center, float radius, Color fill);
 
-  void circle(PVector center, float radius, Color fill, Color stroke);
+  void circle(P2 center, float radius, Color fill, Color stroke);
 
 }
