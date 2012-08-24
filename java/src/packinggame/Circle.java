@@ -26,21 +26,18 @@ class Circle {
     if (!i.overlaps(j)) {
       return ImmutableList.of();
     }
-    float z = P2.dist(i.center, j.center);
-    float beta = i.radius / j.radius;
-    float alpha = (float) Math.pow(beta, 2);
-    float x_j = z / (1 + alpha);
-    float y = x_j * beta;
-    P2 v = i.center;
-    v = v.normalize();
-    P2 u_1 = v, u_2 = v;
-    u_1 = u_1.rotate(PApplet.HALF_PI);
-    u_2 = u_2.rotate(PApplet.HALF_PI * -1);
-    v = v.mult(x_j);
-    u_1 = u_1.mult(y);
-    u_2 = u_2.mult(y);
-    u_1 = u_1.add(v);
-    u_2 = u_2.add(v);
+    final float z = P2.dist(i.center, j.center);
+    final float beta = i.radius / j.radius;
+    final float alpha = (float) Math.pow(beta, 2);
+    final float x_j = z / (1 + alpha);
+    System.out.println(x_j);
+    final float y = x_j * beta;
+    System.out.println(y);
+    final P2 v_direction = i.center.sub(j.center).normalize();
+    System.out.println(v_direction);
+    final P2 v = v_direction.scaleTo(x_j);
+    final P2 u_1 = v_direction.rotate(PApplet.HALF_PI).mult(y).add(v).add(j.center);
+    final P2 u_2 = v_direction.rotate(PApplet.HALF_PI * -1).mult(y).add(v).add(j.center);
     return ImmutableList.of(u_1, u_2);
   }
 

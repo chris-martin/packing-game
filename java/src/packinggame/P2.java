@@ -19,6 +19,11 @@ class P2 {
     return new PVector(x, y);
   }
 
+  @Override
+  public String toString() {
+    return "(" + x + ", " + y + ")";
+  }
+
   float dist(P2 that) {
     return dist(this, that);
   }

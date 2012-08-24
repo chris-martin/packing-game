@@ -117,8 +117,18 @@ class Disks implements DragHandler {
         }
       }
 
-      if (overlaps.size() == 2) {
-
+      P2 p_min = null;
+      float dist_min = Float.MAX_VALUE;
+      for (P2 p : boundary_intersections) {
+        float dist = p.dist(ghost_disk.center);
+        if (dist < dist_min) {
+          dist_min = dist;
+          p_min = p;
+        }
+      }
+      if (p_min != null) {
+        dragging_disk.center = p_min;
+        return;
       }
 
       dragging_disk.center = null;
