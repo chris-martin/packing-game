@@ -1,7 +1,7 @@
 package packinggame;
 
 import com.google.common.collect.ImmutableList;
-import processing.core.PApplet;
+import packinggame.canvas.P2;
 
 import java.util.List;
 

@@ -1,35 +1,38 @@
 package packinggame;
 
+import packinggame.canvas.Canvas;
+import packinggame.canvas.IntSize;
+import packinggame.canvas.PAppletCanvas;
 import packinggame.loop.LoopRequestAggregator;
 import packinggame.loop.Looping;
 import processing.core.PApplet;
 
-import java.awt.*;
-
 public class Main extends PApplet {
 
-  float phi = (1 + sqrt(5)) / 2;
-  int window_width = 800;
-  int window_height = (int) (800 / phi);
+  static IntSize canvas_size() {
+    float phi = (1 + sqrt(5)) / 2;
+    int x = 800;
+    int y = (int) (x / phi);
+    return new IntSize(x, y);
+  }
+  IntSize canvas_size = canvas_size();
 
   Disks disks;
+  Game game;
   MouseManager mouse_manager;
   LoopRequestAggregator loop_request = Looping.aggregator(Looping.papplet(this));
+  Canvas canvas = new PAppletCanvas(this);
 
   @Override public void setup() {
-    size(window_width, window_height);
+    size(canvas_size.x, canvas_size.y);
     smooth();
 
     mouse_manager = new MouseManager(this);
 
     disks = new Disks();
     disks.loop_request = loop_request.newLoopRequest();
-    disks.add();
-    disks.add();
-    disks.add();
-    disks.add();
-    disks.add();
     mouse_manager.add(disks);
+    game = new Game(disks);
   }
 
   @Override public void mousePressed() {
@@ -51,37 +54,5 @@ public class Main extends PApplet {
     text("hello diskworld", 300, 300);
     disks.draw(canvas);
   }
-
-  final Canvas canvas = new Canvas() {
-
-    @Override
-    public void fill(Color color) {
-      Main.this.fill(color.getRGB());
-    }
-
-    @Override
-    public void stroke(Color color) {
-      Main.this.stroke(color.getRGB());
-    }
-
-    @Override
-    public void circle(P2 center, float radius) {
-      float diameter = 2 * radius;
-      Main.this.ellipse(center.x, center.y, diameter, diameter);
-    }
-
-    @Override
-    public void circle(P2 center, float radius, Color fill) {
-      fill(fill);
-      circle(center, radius);
-    }
-
-    @Override
-    public void circle(P2 center, float radius, Color fill, Color stroke) {
-      stroke(stroke);
-      circle(center, radius, fill);
-    }
-
-  };
 
 }

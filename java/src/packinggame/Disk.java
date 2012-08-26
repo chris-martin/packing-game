@@ -1,5 +1,7 @@
 package packinggame;
 
+import packinggame.canvas.P2;
+
 import java.awt.*;
 
 class Disk {
@@ -9,7 +11,7 @@ class Disk {
   float radius;
   boolean ghost;
 
-  void draw(Canvas canvas) {
+  void draw(packinggame.canvas.Canvas canvas) {
     if (c != null && center != null) {
       Color c = this.c;
       Color stroke;

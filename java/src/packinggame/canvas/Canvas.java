@@ -1,10 +1,8 @@
-package packinggame;
-
-import processing.core.PVector;
+package packinggame.canvas;
 
 import java.awt.*;
 
-interface Canvas {
+public interface Canvas {
 
   void fill(Color color);
 
@@ -15,5 +13,9 @@ interface Canvas {
   void circle(P2 center, float radius, Color fill);
 
   void circle(P2 center, float radius, Color fill, Color stroke);
+
+  IntSize size();
+
+  Canvas subsection(P2 position, IntSize size);
 
 }

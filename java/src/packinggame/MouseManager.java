@@ -1,5 +1,6 @@
 package packinggame;
 
+import packinggame.canvas.P2;
 import processing.core.PApplet;
 
 import java.util.ArrayList;

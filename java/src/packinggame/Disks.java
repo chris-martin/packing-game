@@ -1,5 +1,7 @@
 package packinggame;
 
+import packinggame.canvas.Canvas;
+import packinggame.canvas.P2;
 import packinggame.loop.LoopRequest;
 
 import java.util.Collections;
@@ -15,8 +17,6 @@ class Disks implements DragHandler {
 
   LoopRequest loop_request;
 
-  DiskFactory factory = new DiskFactory();
-
   Set<Disk> stationary_disks = new HashSet<Disk>();
 
   List<Circle> overlap_boundaries = newArrayList();
@@ -27,8 +27,14 @@ class Disks implements DragHandler {
 
   Disk ghost_disk;
 
-  void add() {
-    stationary_disks.add(factory.next());
+  void add(Disk d) {
+    stationary_disks.add(d);
+  }
+
+  void clear() {
+    stop_dragging();
+    stationary_disks.clear();
+    loop_request.loop(true);
   }
 
   void draw(Canvas canvas) {
@@ -81,7 +87,7 @@ class Disks implements DragHandler {
     return null;
   }
 
-  @Override public void release(P2 mouse) {
+  void stop_dragging() {
     if (dragging_disk != null) {
       if (dragging_disk.center == null) {
         dragging_disk.center = dragging_disk_start;
@@ -93,6 +99,10 @@ class Disks implements DragHandler {
       overlap_boundaries.clear();
       boundary_intersections.clear();
     }
+  }
+
+  @Override public void release(P2 mouse) {
+    stop_dragging();
   }
 
   @Override public void drag(DragInfo drag_info) {

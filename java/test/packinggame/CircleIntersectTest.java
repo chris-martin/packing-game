@@ -2,6 +2,7 @@ package packinggame;
 
 import com.google.common.base.Joiner;
 import org.testng.annotations.Test;
+import packinggame.canvas.P2;
 
 import java.util.Iterator;
 import java.util.List;

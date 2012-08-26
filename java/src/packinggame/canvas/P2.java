@@ -1,21 +1,21 @@
-package packinggame;
+package packinggame.canvas;
 
 import processing.core.PVector;
 
-class P2 {
+public class P2 {
 
-  final float x, y;
+  public final float x, y;
 
-  P2(float x, float y) {
+  public P2(float x, float y) {
     this.x = x;
     this.y = y;
   }
 
-  P2(PVector p) {
+  public P2(PVector p) {
     this(p.x, p.y);
   }
 
-  PVector pVector() {
+  public PVector pVector() {
     return new PVector(x, y);
   }
 
@@ -24,49 +24,49 @@ class P2 {
     return "(" + x + ", " + y + ")";
   }
 
-  float dist(P2 that) {
+  public float dist(P2 that) {
     return dist(this, that);
   }
 
-  static float dist(P2 a, P2 b) {
+  public static float dist(P2 a, P2 b) {
     return PVector.dist(a.pVector(), b.pVector());
   }
 
-  P2 normalize() {
+  public P2 normalize() {
     PVector v = pVector();
     v.normalize();
     return new P2(v);
   }
 
-  P2 mult(float f) {
+  public P2 mult(float f) {
     PVector v = pVector();
     v.mult(f);
     return new P2(v);
   }
 
-  P2 add(P2 p) {
+  public P2 add(P2 p) {
     PVector v = pVector();
     v.add(p.pVector());
     return new P2(v);
   }
 
-  P2 rotate(float angle) {
+  public P2 rotate(float angle) {
     PVector v = pVector();
     v.rotate(angle);
     return new P2(v);
   }
 
-  P2 sub(P2 p) {
+  public P2 sub(P2 p) {
     PVector v = pVector();
     v.sub(p.pVector());
     return new P2(v);
   }
 
-  float mag() {
+  public float mag() {
     return pVector().mag();
   }
 
-  P2 scaleTo(float f) {
+  public P2 scaleTo(float f) {
     PVector v = pVector();
     v.scaleTo(f);
     return new P2(v);
