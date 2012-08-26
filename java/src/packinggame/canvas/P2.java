@@ -19,6 +19,14 @@ public class P2 {
     return new PVector(x, y);
   }
 
+  public P2 x(float x) {
+    return new P2(x, y);
+  }
+
+  public P2 y(float y) {
+    return new P2(x, y);
+  }
+
   @Override
   public String toString() {
     return "(" + x + ", " + y + ")";

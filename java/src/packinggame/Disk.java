@@ -33,4 +33,13 @@ class Disk {
     return center.dist(d.center) < radius + d.radius;
   }
 
+  Disk copy() {
+    Disk copy = new Disk();
+    copy.c = c;
+    copy.center = center;
+    copy.radius = radius;
+    copy.ghost = ghost;
+    return copy;
+  }
+
 }

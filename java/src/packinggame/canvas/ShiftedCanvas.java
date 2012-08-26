@@ -1,7 +1,5 @@
 package packinggame.canvas;
 
-import java.awt.*;
-
 public class ShiftedCanvas extends CanvasWrapper {
 
   final P2 shift;
@@ -19,8 +17,8 @@ public class ShiftedCanvas extends CanvasWrapper {
   }
 
   @Override
-  public Canvas subsection(P2 position, IntSize size) {
-    return super.subsection(position.add(shift), size);
+  public void rectangle(P2 position, P2 size) {
+    super.rectangle(position.add(shift), size);
   }
 
   @Override

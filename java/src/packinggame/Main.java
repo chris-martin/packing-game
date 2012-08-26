@@ -11,28 +11,31 @@ public class Main extends PApplet {
 
   static IntSize canvas_size() {
     float phi = (1 + sqrt(5)) / 2;
-    int x = 800;
+    int x = 1100;
     int y = (int) (x / phi);
     return new IntSize(x, y);
   }
   IntSize canvas_size = canvas_size();
 
-  Disks disks;
-  Game game;
-  MouseManager mouse_manager;
+  Game game = new Game();
+  MouseManager mouse_manager = new MouseManager(this);
   LoopRequestAggregator loop_request = Looping.aggregator(Looping.papplet(this));
-  Canvas canvas = new PAppletCanvas(this);
+  Canvas canvas = new PAppletCanvas(this) {
+    @Override
+    public IntSize size() {
+      return canvas_size;
+    }
+  };
 
   @Override public void setup() {
     size(canvas_size.x, canvas_size.y);
     smooth();
 
-    mouse_manager = new MouseManager(this);
-
-    disks = new Disks();
-    disks.loop_request = loop_request.newLoopRequest();
-    mouse_manager.add(disks);
-    game = new Game(disks);
+    mouse_manager.add(game.drag_handler);
+    game = new Game();
+    game.set_loop_request(loop_request.newLoopRequest());
+    game.set_canvas(canvas);
+    game.start();
   }
 
   @Override public void mousePressed() {
@@ -52,7 +55,7 @@ public class Main extends PApplet {
     background(150, 10, 95);
     fill(0, 0, 0);
     text("hello diskworld", 300, 300);
-    disks.draw(canvas);
+    game.draw();
   }
 
 }

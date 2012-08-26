@@ -2,7 +2,7 @@ package packinggame.canvas;
 
 import java.awt.*;
 
-public class CanvasWrapper implements Canvas {
+public class CanvasWrapper extends BaseCanvas {
 
   final Canvas canvas;
 
@@ -26,13 +26,8 @@ public class CanvasWrapper implements Canvas {
   }
 
   @Override
-  public void circle(P2 center, float radius, Color fill) {
-    canvas.circle(center, radius, fill);
-  }
-
-  @Override
-  public void circle(P2 center, float radius, Color fill, Color stroke) {
-    canvas.circle(center, radius, fill, stroke);
+  public void rectangle(P2 position, P2 size) {
+    canvas.rectangle(position, size);
   }
 
   @Override

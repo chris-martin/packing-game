@@ -33,4 +33,14 @@ public class PAppletCanvas extends BaseCanvas {
     applet.ellipse(center.x, center.y, diameter, diameter);
   }
 
+  @Override
+  public void background(Color background) {
+    applet.background(background.getRGB());
+  }
+
+  @Override
+  public void rectangle(P2 position, P2 size) {
+    applet.rect(position.x, position.y, size.x, size.y);
+  }
+
 }

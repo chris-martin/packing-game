@@ -10,6 +10,13 @@ public abstract class BaseCanvas implements Canvas {
   }
 
   @Override
+  public void background(Color background) {
+    fill(background);
+    IntSize size = size();
+    rectangle(new P2(0, 0), new P2(size.x, size.y));
+  }
+
+  @Override
   public void circle(P2 center, float radius, Color fill) {
     fill(fill);
     circle(center, radius);

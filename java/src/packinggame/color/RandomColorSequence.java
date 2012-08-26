@@ -6,6 +6,8 @@ import java.util.Random;
 public class RandomColorSequence implements ColorSequence {
 
   final Random random;
+  public float saturation = .8f;
+  public float brightness = .6f;
 
   public RandomColorSequence() {
     random = new Random();
@@ -17,7 +19,7 @@ public class RandomColorSequence implements ColorSequence {
 
   @Override
   public Color next() {
-    return Color.getHSBColor(random.nextFloat(), .8f, .6f);
+    return Color.getHSBColor(random.nextFloat(), saturation, brightness);
   }
 
 }
