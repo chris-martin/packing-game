@@ -5,6 +5,7 @@ import packinggame.canvas.IntSize;
 import packinggame.canvas.PAppletCanvas;
 import packinggame.loop.LoopRequestAggregator;
 import packinggame.loop.Looping;
+import packinggame.mouse.MouseManager;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
@@ -30,9 +31,9 @@ public class Main extends PApplet {
   @Override public void setup() {
     size(canvas_size.x, canvas_size.y);
     smooth();
+    strokeWeight(0);
 
     mouse_manager.add(game.drag_handler);
-    game = new Game();
     game.set_loop_request(loop_request.newLoopRequest());
     game.set_canvas(canvas);
     game.start();
@@ -54,7 +55,6 @@ public class Main extends PApplet {
     colorMode(HSB, 255, 100, 100);
     background(150, 10, 95);
     fill(0, 0, 0);
-    text("hello diskworld", 300, 300);
     game.draw();
   }
 

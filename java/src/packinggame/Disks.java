@@ -3,6 +3,8 @@ package packinggame;
 import packinggame.canvas.Canvas;
 import packinggame.canvas.P2;
 import packinggame.loop.LoopRequest;
+import packinggame.mouse.DragHandler;
+import packinggame.mouse.DragInfo;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -105,9 +107,9 @@ class Disks implements DragHandler {
     stop_dragging();
   }
 
-  @Override public void drag(DragInfo drag_info) {
+  @Override public void drag(P2 drag_diff) {
     if (dragging_disk != null) {
-      ghost_disk.center = dragging_disk.center = dragging_disk_start.add(drag_info.drag_diff());
+      ghost_disk.center = dragging_disk.center = dragging_disk_start.add(drag_diff);
       List<Circle> overlaps = get_overlaps();
 
       // No overlaps
@@ -119,9 +121,18 @@ class Disks implements DragHandler {
       // to the closest edge of the overlapped disk
       if (overlaps.size() == 1) {
         Circle overlap = overlaps.get(0);
+
+        // The direction from the overlapped disk center to the desired position
         P2 v = dragging_disk.center.sub(overlap.center)
             .normalize().mult(overlap.radius);
-        v = v.scaleTo(v.mag()).add(overlap.center);
+
+        // If the direction is 0, the circles have exactly the same center,
+        // so choose an arbitrary direction.
+        if (v.isZero()) {
+          v = new P2(0, -1);
+        }
+
+        v = v.scaleTo(overlap.radius).add(overlap.center);
         dragging_disk.center = v;
         if (get_overlaps().size() == 0) {
           return;

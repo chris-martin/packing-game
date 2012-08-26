@@ -8,8 +8,9 @@ import packinggame.color.RandomColorSequence;
 import packinggame.loop.LoopRequest;
 import packinggame.loop.LoopRequestAggregator;
 import packinggame.loop.Looping;
+import packinggame.mouse.CompositeDragHandler;
+import packinggame.mouse.ShiftedDragHandler;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -17,10 +18,13 @@ import static com.google.common.collect.Lists.newArrayList;
 
 class Game {
 
+  final CompositeDragHandler drag_handler = new CompositeDragHandler();
+
   List<PlayField> playFields = newArrayList();
   {
     for (int i = 0; i < 2; i++) {
-      playFields.add(new PlayField());
+      PlayField playField = new PlayField();
+      playFields.add(playField);
     }
   }
 
@@ -38,6 +42,9 @@ class Game {
 
     playFields.get(0).set_canvas(canvas.subsection(new P2(0, 0), new IntSize(split, height)));
     playFields.get(1).set_canvas(canvas.subsection(new P2(split, 0), new IntSize(canvasSize.x - split, height)));
+
+    drag_handler.handlers.add(playFields.get(0).disks);
+    drag_handler.handlers.add(new ShiftedDragHandler(playFields.get(1).disks, new P2(split, 0)));
   }
 
   void draw() {
@@ -46,6 +53,8 @@ class Game {
     colors.saturation = .2f;
     for (PlayField playField : playFields) {
       playField.get_canvas().background(colors.next());
+    }
+    for (PlayField playField : playFields) {
       playField.draw();
     }
   }
@@ -67,8 +76,8 @@ class Game {
       for (int j = 0; j < 2; j++) {
         ds.add(d.copy());
       }
-      ds.get(0).center = ds.get(0).center.x(playFields.get(0).get_canvas().size().x - 50);
-      ds.get(1).center = ds.get(1).center.x(50);
+      ds.get(0).center = ds.get(1).center.x(50);
+      ds.get(1).center = ds.get(0).center.x(playFields.get(0).get_canvas().size().x - 50);
 
       for (int j = 0; j < 2; j++) {
         playFields.get(j).disks.add(ds.get(j));
@@ -76,19 +85,5 @@ class Game {
       y += 2 * d.radius;
     }
   }
-
-  final DragHandler drag_handler = new DragHandler() {
-    @Override
-    public void press(P2 mouse) {
-    }
-
-    @Override
-    public void release(P2 mouse) {
-    }
-
-    @Override
-    public void drag(DragInfo drag_info) {
-    }
-  };
 
 }

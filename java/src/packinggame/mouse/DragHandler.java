@@ -1,9 +1,9 @@
-package packinggame;
+package packinggame.mouse;
 
 import packinggame.canvas.P2;
 
-interface DragHandler {
+public interface DragHandler {
   void press(P2 mouse);
   void release(P2 mouse);
-  void drag(DragInfo drag_info);
+  void drag(P2 diff);
 }
