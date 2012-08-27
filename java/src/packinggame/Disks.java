@@ -41,9 +41,9 @@ class Disks implements DragHandler {
 
   void draw(Canvas canvas) {
 
-    if (circumscribing_circle == null) {
+//    if (circumscribing_circle == null) {
       circumscribing_circle = circumscribe();
-    }
+//    }
     canvas.circle(circumscribing_circle.center, circumscribing_circle.radius, new Color(255, 255, 255, 127));
 
     for (Disk d : stationary_disks) {
@@ -198,39 +198,21 @@ class Disks implements DragHandler {
     return overlaps;
   }
 
-  boolean contained_by(Circle c) {
+  float enclosing_radius(final P2 center) {
+    class X {
+      float radius = 0;
+      void consider(Disk d) {
+        radius = Math.max(radius, center.dist(d.circle.center) + d.circle.radius);
+      }
+    }
+    X x = new X();
     for (Disk d : stationary_disks) {
-      if (!c.contains(d.circle)) {
-        return false;
-      }
+      x.consider(d);
     }
-    return true;
-  }
-
-  float enclosing_radius(P2 center) {
-
-    Circle x = new Circle();
-    x.center = center;
-    x.radius = 100;
-
-    float a = 0;
-    while (!contained_by(x)) {
-      x.radius += 100;
+    if (dragging_disk != null) {
+      x.consider(dragging_disk);
     }
-    float b = x.radius;
-    while (true) {
-      float error = b-a;
-      if (error < .0001) {
-        break;
-      }
-      x.radius = a + error / 2;
-      if (contained_by(x)) {
-        b = x.radius;
-      } else {
-        a = x.radius;
-      }
-    }
-    return b;
+    return x.radius;
   }
 
   Circle circumscribe() {
@@ -238,13 +220,15 @@ class Disks implements DragHandler {
     x.center = new P2(200, 200);
     x.radius = enclosing_radius(x.center);
     Random r = new Random(0);
-    for (int i = 0; i < 500; i++) {
-      float angle = r.nextFloat() * 2 * (float) Math.PI;
-      P2 step = new P2((float) Math.cos(angle), (float) Math.sin(angle));
-      Circle shifted = x.withCenter(x.center.add(step));
-      shifted.radius = enclosing_radius(shifted.center);
-      if (shifted.radius < x.radius) {
-        x = shifted;
+    for (int step_size = 100; step_size != 0; step_size--) {
+      for (int i = 0; i < 100; i++) {
+        float angle = r.nextFloat() * 2 * (float) Math.PI;
+        P2 step = new P2((float) Math.cos(angle), (float) Math.sin(angle)).scaleTo(step_size);
+        Circle shifted = x.withCenter(x.center.add(step));
+        shifted.radius = enclosing_radius(shifted.center);
+        if (shifted.radius < x.radius) {
+          x = shifted;
+        }
       }
     }
     return x;
