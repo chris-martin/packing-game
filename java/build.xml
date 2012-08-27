@@ -36,9 +36,6 @@
   <target name="build">
     <!-- Copy the library dependencies. -->
     <mkdir dir="${classes.dir}"/>
-    <copy todir="${classes.dir}/lib">
-        <fileset dir="${lib.dir}"/>
-    </copy>
 
     <echo message="${ant.project.name} : ${ant.file}"/>
     <javac srcdir="${src.dir}" includes="**" encoding="utf-8"
@@ -52,8 +49,19 @@
   <target name="build-jar" depends="build">
     <mkdir dir="${jar.dir}"/>
     <jar destfile="${jar.file}" basedir="${classes.dir}">
-      <zipgroupfileset dir="${lib.dir}" includes="Jama-1.0.2.jar" />
+      <zipfileset includes="**/*.class" src="lib/guava-13.0.jar"/>
+      <zipfileset includes="**/*.class" src="lib/ProcessingCore.jar"/>
+      <manifest>
+        <attribute name="Main-Class"
+                   value="packinggame.Main"/>
+      </manifest>
     </jar>
+  </target>
+
+  <target name="run" depends="build-jar">
+    <exec executable="java">
+      <arg line="-jar ${jar.file}"/>
+    </exec>
   </target>
 
 </project>

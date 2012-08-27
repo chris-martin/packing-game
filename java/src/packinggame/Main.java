@@ -10,8 +10,9 @@ import processing.core.PApplet;
 
 public class Main extends PApplet {
 
-  public static Main instance;
-  { instance = this; }
+  public static void main(String[] args) {
+    PApplet.main(new String[]{ "packinggame.Main" });
+  }
 
   static IntSize canvas_size() {
     float phi = (1 + sqrt(5)) / 2;
