@@ -8,7 +8,7 @@ the radius of the circle that circumscribes them.
 Building
 --------
 
-An ant ```build.xml``` is provided.
+An ant ```build.xml``` is provided. From the java/ directory:
 
 Run ```ant build-jar``` to construct an executable jar.
 
