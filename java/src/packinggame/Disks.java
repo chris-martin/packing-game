@@ -5,10 +5,9 @@ import packinggame.canvas.P2;
 import packinggame.loop.LoopRequest;
 import packinggame.mouse.DragHandler;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -28,6 +27,8 @@ class Disks implements DragHandler {
 
   Disk ghost_disk;
 
+  Circle circumscribing_circle;
+
   void add(Disk d) {
     stationary_disks.add(d);
   }
@@ -39,9 +40,16 @@ class Disks implements DragHandler {
   }
 
   void draw(Canvas canvas) {
+
+    if (circumscribing_circle == null) {
+      circumscribing_circle = circumscribe();
+    }
+    canvas.circle(circumscribing_circle.center, circumscribing_circle.radius, new Color(255, 255, 255, 127));
+
     for (Disk d : stationary_disks) {
       d.draw(canvas);
     }
+
     if (dragging_disk != null) {
       dragging_disk.draw(canvas);
       if (ghost_disk != null) {
@@ -50,17 +58,18 @@ class Disks implements DragHandler {
     } else {
       loop_request.loop(false);
     }
+
   }
 
   @Override public void press(P2 mouse) {
     dragging_disk = at_position(mouse);
     if (dragging_disk != null) {
-      dragging_disk_start = dragging_disk.center;
+      dragging_disk_start = dragging_disk.circle.center;
       stationary_disks.remove(dragging_disk);
       for (Disk disk : stationary_disks) {
         Circle c = new Circle();
-        c.center = disk.center;
-        c.radius = disk.radius + dragging_disk.radius;
+        c.center = disk.circle.center;
+        c.radius = disk.circle.radius + dragging_disk.circle.radius;
         overlap_boundaries.add(c);
       }
       for (int i = 0; i < overlap_boundaries.size(); i++) {
@@ -72,9 +81,9 @@ class Disks implements DragHandler {
       }
       ghost_disk = new Disk();
       ghost_disk.ghost = true;
-      ghost_disk.c = dragging_disk.c;
-      ghost_disk.center = dragging_disk_start;
-      ghost_disk.radius = dragging_disk.radius;
+      ghost_disk.color = dragging_disk.color;
+      ghost_disk.circle.center = dragging_disk_start;
+      ghost_disk.circle.radius = dragging_disk.circle.radius;
       loop_request.loop(true);
     }
   }
@@ -90,15 +99,22 @@ class Disks implements DragHandler {
 
   void stop_dragging() {
     if (dragging_disk != null) {
-      if (dragging_disk.center == null) {
-        dragging_disk.center = dragging_disk_start;
+
+      // If we found no legitimate place to drop the disk,
+      // move it back to its original position
+      if (dragging_disk.circle.center == null) {
+        dragging_disk.circle.center = dragging_disk_start;
       }
+
       stationary_disks.add(dragging_disk);
       dragging_disk = null;
       dragging_disk_start = null;
       ghost_disk = null;
       overlap_boundaries.clear();
       boundary_intersections.clear();
+
+      circumscribing_circle = circumscribe();
+
     }
   }
 
@@ -108,7 +124,7 @@ class Disks implements DragHandler {
 
   @Override public void drag(P2 drag_diff) {
     if (dragging_disk != null) {
-      ghost_disk.center = dragging_disk.center = dragging_disk_start.add(drag_diff);
+      ghost_disk.circle.center = dragging_disk.circle.center = dragging_disk_start.add(drag_diff);
       List<Circle> overlaps = get_overlaps();
 
       // No overlaps
@@ -122,7 +138,7 @@ class Disks implements DragHandler {
         Circle overlap = overlaps.get(0);
 
         // The direction from the overlapped disk center to the desired position
-        P2 v = dragging_disk.center.sub(overlap.center)
+        P2 v = dragging_disk.circle.center.sub(overlap.center)
             .normalize().mult(overlap.radius);
 
         // If the direction is 0, the circles have exactly the same center,
@@ -132,7 +148,7 @@ class Disks implements DragHandler {
         }
 
         v = v.scaleTo(overlap.radius).add(overlap.center);
-        dragging_disk.center = v;
+        dragging_disk.circle.center = v;
         if (get_overlaps().size() == 0) {
           return;
         }
@@ -154,18 +170,18 @@ class Disks implements DragHandler {
       for (P2 p : boundary_intersections) {
         PointWithDistance pwd = new PointWithDistance();
         pwd.p = p;
-        pwd.d = p.dist(ghost_disk.center);
+        pwd.d = p.dist(ghost_disk.circle.center);
         points.add(pwd);
       }
       Collections.sort(points);
       for (PointWithDistance pwd : points) {
-        dragging_disk.center = pwd.p;
+        dragging_disk.circle.center = pwd.p;
         if (get_overlaps().size() == 0) {
           return;
         }
       }
 
-      dragging_disk.center = null;
+      dragging_disk.circle.center = null;
 
     }
   }
@@ -174,12 +190,64 @@ class Disks implements DragHandler {
     List<Circle> overlaps = newArrayList();
     if (dragging_disk != null) {
       for (Circle c : overlap_boundaries) {
-        if (c.withRadius(c.radius - padding).contains(dragging_disk.center)) {
+        if (c.withRadius(c.radius - padding).contains(dragging_disk.circle.center)) {
           overlaps.add(c);
         }
       }
     }
     return overlaps;
+  }
+
+  boolean contained_by(Circle c) {
+    for (Disk d : stationary_disks) {
+      if (!c.contains(d.circle)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  float enclosing_radius(P2 center) {
+
+    Circle x = new Circle();
+    x.center = center;
+    x.radius = 100;
+
+    float a = 0;
+    while (!contained_by(x)) {
+      x.radius += 100;
+    }
+    float b = x.radius;
+    while (true) {
+      float error = b-a;
+      if (error < .0001) {
+        break;
+      }
+      x.radius = a + error / 2;
+      if (contained_by(x)) {
+        b = x.radius;
+      } else {
+        a = x.radius;
+      }
+    }
+    return b;
+  }
+
+  Circle circumscribe() {
+    Circle x = new Circle();
+    x.center = new P2(200, 200);
+    x.radius = enclosing_radius(x.center);
+    Random r = new Random(0);
+    for (int i = 0; i < 500; i++) {
+      float angle = r.nextFloat() * 2 * (float) Math.PI;
+      P2 step = new P2((float) Math.cos(angle), (float) Math.sin(angle));
+      Circle shifted = x.withCenter(x.center.add(step));
+      shifted.radius = enclosing_radius(shifted.center);
+      if (shifted.radius < x.radius) {
+        x = shifted;
+      }
+    }
+    return x;
   }
 
 }

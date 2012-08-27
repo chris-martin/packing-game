@@ -68,21 +68,21 @@ class Game {
     int y = 0;
     for (int i = 0; i < 10; i++) {
       Disk d = new Disk();
-      d.c = colors.next();
-      d.radius = 10 + radiusRandom.nextInt(40);
-      d.center = new P2(0, y + d.radius);
+      d.color = colors.next();
+      d.circle.radius = 10 + radiusRandom.nextInt(40);
+      d.circle.center = new P2(0, y + d.circle.radius);
 
       List<Disk> ds = newArrayList();
       for (int j = 0; j < 2; j++) {
         ds.add(d.copy());
       }
-      ds.get(0).center = ds.get(1).center.x(50);
-      ds.get(1).center = ds.get(0).center.x(playFields.get(0).get_canvas().size().x - 50);
+      ds.get(0).circle.center = ds.get(1).circle.center.x(50);
+      ds.get(1).circle.center = ds.get(0).circle.center.x(playFields.get(0).get_canvas().size().x - 50);
 
       for (int j = 0; j < 2; j++) {
         playFields.get(j).disks.add(ds.get(j));
       }
-      y += 2 * d.radius;
+      y += 2 * d.circle.radius;
     }
   }
 

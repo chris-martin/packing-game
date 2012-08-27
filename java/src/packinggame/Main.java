@@ -10,6 +10,9 @@ import processing.core.PApplet;
 
 public class Main extends PApplet {
 
+  public static Main instance;
+  { instance = this; }
+
   static IntSize canvas_size() {
     float phi = (1 + sqrt(5)) / 2;
     int x = 1100;

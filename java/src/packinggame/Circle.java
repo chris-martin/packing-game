@@ -5,14 +5,19 @@ import packinggame.canvas.P2;
 
 import java.util.List;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 class Circle {
 
   P2 center;
   float radius;
+
+  Circle withCenter(P2 center) {
+    Circle c = new Circle();
+    c.center = center;
+    c.radius = radius;
+    return c;
+  }
 
   Circle withRadius(float radius) {
     Circle c = new Circle();
@@ -21,12 +26,30 @@ class Circle {
     return c;
   }
 
+  Circle copy() {
+    Circle copy = new Circle();
+    copy.center = center;
+    copy.radius = radius;
+    return copy;
+  }
+
   boolean contains(P2 p) {
     return p.dist(center) < radius;
   }
 
+  boolean contains(Circle that) {
+    return P2.dist(center, that.center) < abs(radius - that.radius);
+  }
+
   boolean overlaps(Circle that) {
     return P2.dist(center, that.center) < radius + that.radius;
+  }
+
+  // Precondition: containing_circle.contains(this).
+  // The smallest vector that pushes this up to the edge of containing_circle.
+  P2 to_containing_circle(Circle containing_circle) {
+    P2 v = center.sub(containing_circle.center);
+    return v.scaleTo(containing_circle.radius - radius - v.mag());
   }
 
   List<P2> intersect(Circle that) {
