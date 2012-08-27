@@ -9,6 +9,8 @@ Building
 --------
 
 An ant ```build.xml``` is provided.
+
 Run ```ant build-jar``` to construct an executable jar.
+
 Run ```ant run``` to run the application.
 
