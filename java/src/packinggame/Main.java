@@ -31,7 +31,6 @@ public class Main extends PApplet {
   @Override public void setup() {
     size(canvas_size.x, canvas_size.y);
     smooth();
-    strokeWeight(0);
 
     mouse_manager.add(game.drag_handler);
     game.set_loop_request(loop_request.newLoopRequest());

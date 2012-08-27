@@ -13,15 +13,11 @@ class Disk {
 
   void draw(packinggame.canvas.Canvas canvas) {
     if (c != null && center != null) {
-      Color c = this.c;
-      Color stroke;
       if (ghost) {
-        c = new Color(c.getRed(), c.getGreen(), c.getBlue(), 30);
-        stroke = Color.black;
+        canvas.circle(center, radius, new Color(c.getRed(), c.getGreen(), c.getBlue(), 50), new Color(0, 0, 0, 50), 2);
       } else {
-        stroke = c.darker().darker();
+        canvas.circle(center, radius, c);
       }
-      canvas.circle(center, radius, c, stroke);
     }
   }
 

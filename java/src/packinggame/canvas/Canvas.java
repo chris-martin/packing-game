@@ -8,13 +8,17 @@ public interface Canvas {
 
   void stroke(Color stroke);
 
+  void stroke(float weight);
+
   void background(Color background);
 
   void circle(P2 center, float radius);
 
   void circle(P2 center, float radius, Color fill);
 
-  void circle(P2 center, float radius, Color fill, Color stroke);
+  void circle(P2 center, float radius, Color fill, Color stroke, float strokeWeight);
+
+  void circle(P2 center, float radius, Color stroke, float strokeWeight);
 
   void rectangle(P2 position, P2 size);
 

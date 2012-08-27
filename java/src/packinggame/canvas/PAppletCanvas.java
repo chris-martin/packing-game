@@ -19,12 +19,25 @@ public class PAppletCanvas extends BaseCanvas {
 
   @Override
   public void fill(Color color) {
-    applet.fill(color.getRGB());
+    if (color.getAlpha() == 0) {
+      applet.noFill();
+    } else {
+      applet.fill(color.getRGB());
+    }
   }
 
   @Override
   public void stroke(Color color) {
     applet.stroke(color.getRGB());
+  }
+
+  @Override
+  public void stroke(float weight) {
+    if (weight == 0) {
+      applet.noStroke();
+    } else {
+      applet.strokeWeight(weight);
+    }
   }
 
   @Override
@@ -40,6 +53,7 @@ public class PAppletCanvas extends BaseCanvas {
 
   @Override
   public void rectangle(P2 position, P2 size) {
+    stroke(0);
     applet.rect(position.x, position.y, size.x, size.y);
   }
 

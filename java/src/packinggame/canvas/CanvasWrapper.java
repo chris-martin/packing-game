@@ -21,6 +21,11 @@ public class CanvasWrapper extends BaseCanvas {
   }
 
   @Override
+  public void stroke(float weight) {
+    canvas.stroke(weight);
+  }
+
+  @Override
   public void circle(P2 center, float radius) {
     canvas.circle(center, radius);
   }

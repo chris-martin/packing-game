@@ -4,7 +4,6 @@ import packinggame.canvas.Canvas;
 import packinggame.canvas.P2;
 import packinggame.loop.LoopRequest;
 import packinggame.mouse.DragHandler;
-import packinggame.mouse.DragInfo;
 
 import java.util.Collections;
 import java.util.HashSet;

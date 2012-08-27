@@ -19,13 +19,24 @@ public abstract class BaseCanvas implements Canvas {
   @Override
   public void circle(P2 center, float radius, Color fill) {
     fill(fill);
+    stroke(0);
     circle(center, radius);
   }
 
   @Override
-  public void circle(P2 center, float radius, Color fill, Color stroke) {
+  public void circle(P2 center, float radius, Color fill, Color stroke, float strokeWeight) {
     stroke(stroke);
-    circle(center, radius, fill);
+    stroke(strokeWeight);
+    fill(fill);
+    circle(center, radius);
+  }
+
+  @Override
+  public void circle(P2 center, float radius, Color stroke, float strokeWeight) {
+    stroke(stroke);
+    stroke(strokeWeight);
+    fill(new Color(0, 0, 0, 0));
+    circle(center, radius, stroke);
   }
 
 }
