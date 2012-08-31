@@ -3,6 +3,10 @@ package packinggame;
 import packinggame.canvas.P2;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 class Disk {
 
@@ -40,6 +44,14 @@ class Disk {
     copy.circle = circle.copy();
     copy.ghost = ghost;
     return copy;
+  }
+
+  static List<Circle> circles(Collection<Disk> disks) {
+    List<Circle> circles = newArrayList();
+    for (Disk d : disks) {
+      circles.add(d.circle);
+    }
+    return circles;
   }
 
 }

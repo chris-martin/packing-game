@@ -2,6 +2,8 @@ package packinggame.canvas;
 
 import processing.core.PVector;
 
+import java.util.Random;
+
 public class P2 {
 
   public final float x, y;
@@ -82,6 +84,23 @@ public class P2 {
     PVector v = pVector();
     v.scaleTo(f);
     return new P2(v);
+  }
+
+  public static P2 random() {
+    return random(new Random());
+  }
+
+  public static P2 random(Random r) {
+    float angle = r.nextFloat() * 2 * (float) Math.PI;
+    return new P2((float) Math.cos(angle), (float) Math.sin(angle));
+  }
+
+  public static P2 random(float scale) {
+    return random(scale, new Random());
+  }
+
+  public static P2 random(float scale, Random r) {
+    return random(r).scaleTo(scale);
   }
 
 }
