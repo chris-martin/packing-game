@@ -26,4 +26,9 @@ public class ShiftedCanvas extends CanvasWrapper {
     return size;
   }
 
+  @Override
+  public void text(String text, H_align align, P2 position) {
+    super.text(text, align, position.add(shift));
+  }
+
 }

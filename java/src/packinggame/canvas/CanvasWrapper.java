@@ -41,6 +41,11 @@ public class CanvasWrapper extends BaseCanvas {
   }
 
   @Override
+  public void text(String text, H_align align, P2 position) {
+    canvas.text(text, align, position);
+  }
+
+  @Override
   public Canvas subsection(P2 position, IntSize size) {
     return canvas.subsection(position, size);
   }

@@ -4,6 +4,10 @@ import java.awt.*;
 
 public interface Canvas {
 
+  enum H_align { left, center, right }
+
+  void text(String text, H_align align, P2 position);
+
   void fill(Color color);
 
   void stroke(Color stroke);

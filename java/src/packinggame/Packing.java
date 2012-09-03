@@ -56,7 +56,6 @@ class Packing {
     float max_radius = radius_sum();
 
     while (max_radius - min_radius > 1) {
-      System.out.println(min_radius + ", " + max_radius);
       float r = (max_radius + min_radius) / 2;
       List<P2> pack = pack(r);
       if (pack != null) {

@@ -24,6 +24,7 @@ class Game {
   {
     for (int i = 0; i < 2; i++) {
       PlayField playField = new PlayField();
+      playField.side = i == 0 ? PlayField.Side.left : PlayField.Side.right;
       playFields.add(playField);
     }
   }
