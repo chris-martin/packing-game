@@ -13,7 +13,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 class Disks implements DragHandler {
 
-  final float padding = .001f;
+  Canvas canvas;
 
   LoopRequest loop_request;
 
@@ -41,7 +41,7 @@ class Disks implements DragHandler {
     circumscribe();
   }
 
-  void draw(Canvas canvas) {
+  void draw() {
 
     canvas.circle(circumscribing_circle.center, circumscribing_circle.radius, new Color(255, 255, 255, 127));
 
@@ -184,7 +184,7 @@ class Disks implements DragHandler {
     List<Circle> overlaps = newArrayList();
     if (dragging_disk != null) {
       for (Circle c : overlap_boundaries) {
-        if (c.withRadius(c.radius - padding).contains(dragging_disk.circle.center)) {
+        if (c.withRadius(c.radius - Config.padding).contains(dragging_disk.circle.center)) {
           overlaps.add(c);
         }
       }
@@ -233,6 +233,21 @@ class Disks implements DragHandler {
       }
 
     }.run();
+  }
+
+  void pack() {
+    P2 offset = new P2(canvas.size().x / 2.f, canvas.size().y / 2.f);
+    List<Disk> disks = newArrayList(stationary_disks);
+    int i = 0;
+    List<P2> pack = Packing.pack(Disk.radii(disks));
+    if (pack != null) {
+      for (P2 p : pack) {
+        disks.get(i).circle.center = p.add(offset);
+        i++;
+      }
+      circumscribe();
+      loop_request.loop(true);
+    }
   }
 
 }

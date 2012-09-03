@@ -11,6 +11,7 @@ class PlayField {
 
   void set_canvas(Canvas canvas) {
     this.canvas = canvas;
+    disks.canvas = canvas;
   }
 
   Canvas get_canvas() {
@@ -26,7 +27,7 @@ class PlayField {
   }
 
   void draw() {
-    disks.draw(canvas);
+    disks.draw();
   }
 
 }

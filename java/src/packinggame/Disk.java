@@ -54,4 +54,12 @@ class Disk {
     return circles;
   }
 
+  static List<Float> radii(Collection<Disk> disks) {
+    List<Float> radii = newArrayList();
+    for (Disk d : disks) {
+      radii.add(d.circle.radius);
+    }
+    return radii;
+  }
+
 }

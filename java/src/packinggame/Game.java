@@ -84,6 +84,7 @@ class Game {
       }
       y += 2 * d.circle.radius;
     }
+    playFields.get(1).disks.pack();
   }
 
 }

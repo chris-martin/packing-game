@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import packinggame.canvas.P2;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -47,7 +48,7 @@ class Packing {
 
     float min_radius = radii.size() == 0 ? 0 : Math.max(
       // the area of the MEC is at least the sum of the disks' areas
-      (float) Math.sqrt(area_sum()),
+      (float) (Math.sqrt(area_sum()) / Math.PI),
       // the radius of the MEC is at least the sum of the first two disks' radii
       desc.size() == 1 ? desc.get(0) : desc.get(0) + desc.get(1)
     );
@@ -55,6 +56,7 @@ class Packing {
     float max_radius = radius_sum();
 
     while (max_radius - min_radius > 1) {
+      System.out.println(min_radius + ", " + max_radius);
       float r = (max_radius + min_radius) / 2;
       List<P2> pack = pack(r);
       if (pack != null) {
@@ -69,13 +71,16 @@ class Packing {
   }
 
   List<P2> pack(float enclosing_radius) {
-    for (int i = 0; i < 20; i++) {
-      List<Circle> circles = circles(),
-          permutation = newArrayList(circles);
-      Collections.shuffle(permutation, new Random(i));
-      if (pack(permutation, enclosing_radius)) {
-        return Circle.centers(circles);
+    List<Circle> circles = circles();
+    List<Circle> permutation = newArrayList(circles);
+    Collections.sort(permutation, new Comparator<Circle>() {
+      @Override
+      public int compare(Circle o1, Circle o2) {
+        return -1 * Float.compare(o1.radius, o2.radius);
       }
+    });
+    if (pack(permutation, enclosing_radius)) {
+      return Circle.centers(circles);
     }
     return null;
   }
@@ -91,22 +96,45 @@ class Packing {
   }
 
   boolean pack(List<Circle> circles, float enclosing_radius) {
+    Circle enclosure = new Circle();
+    enclosure.center = new P2(0, 0);
+    enclosure.radius = enclosing_radius;
     int i = 0;
-    for (Circle c : circles) {
+    position_each_circle: for (Circle c : circles) {
       if (i == 0) {
-        c.center = new P2(0, 0);
-      } else if (i == 1) {
-        c.center = new P2(circles.get(0).radius + c.radius, 0);
+        c.center = new P2(-1 * enclosure.radius + c.radius, 0);
       } else {
-        P2 best_position;
-        float best_radius = Float.MAX_VALUE;
-        for (P2 intersection : Circle.intersect(circles)) {
-          //float radius =
+
+        List<Circle> expanded_circles = newArrayList(), slightly_less_expanded_circles = newArrayList();
+        for (Circle d : circles) {
+          if (d.center != null) {
+            expanded_circles.add(d.withRadiusOffset(c.radius));
+            slightly_less_expanded_circles.add(d.withRadiusOffset(c.radius - Config.padding));
+          }
         }
+
+        List<Circle> boundaries = newArrayList();
+        boundaries.addAll(expanded_circles);
+        boundaries.add(enclosure.withRadiusOffset(-1 * c.radius));
+
+        List<P2> intersections = Circle.intersect(boundaries);
+        Collections.sort(intersections, new Comparator<P2>() {
+          public int compare(P2 a, P2 b) {
+            return -1 * Float.compare(a.mag(), b.mag());
+          }
+        });
+        for (P2 intersection : intersections) {
+          if (enclosure.withRadiusOffset(-1 * (c.radius) + Config.padding).contains(intersection)
+              && !Circle.contains(slightly_less_expanded_circles, intersection)) {
+            c.center = intersection;
+            continue position_each_circle;
+          }
+        }
+        return false;
       }
       i++;
     }
-    return false;
+    return true;
   }
 
 }

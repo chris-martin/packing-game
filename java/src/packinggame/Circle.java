@@ -29,6 +29,10 @@ class Circle {
     return c;
   }
 
+  Circle withRadiusOffset(float off) {
+    return withRadius(radius + off);
+  }
+
   Circle copy() {
     Circle copy = new Circle();
     copy.center = center;
@@ -42,6 +46,15 @@ class Circle {
 
   boolean contains(Circle that) {
     return P2.dist(center, that.center) < abs(radius - that.radius);
+  }
+
+  static boolean contains(List<Circle> circles, P2 p) {
+    for (Circle c : circles) {
+      if (c.center != null && c.contains(p)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   boolean overlaps(Circle that) {
