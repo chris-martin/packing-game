@@ -70,16 +70,13 @@ class Packing {
   }
 
   List<P2> pack(float enclosing_radius) {
-    List<Circle> circles = circles();
-    List<Circle> permutation = newArrayList(circles);
-    Collections.sort(permutation, new Comparator<Circle>() {
-      @Override
-      public int compare(Circle o1, Circle o2) {
-        return -1 * Float.compare(o1.radius, o2.radius);
+    for (int i = 0; i < 100; i++) {
+      List<Circle> circles = circles(),
+        permutation = newArrayList(circles);
+      Collections.shuffle(permutation, Config.deterministic ? new Random(i) : new Random());
+      if (pack(permutation, enclosing_radius)) {
+        return Circle.centers(circles);
       }
-    });
-    if (pack(permutation, enclosing_radius)) {
-      return Circle.centers(circles);
     }
     return null;
   }

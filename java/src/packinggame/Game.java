@@ -64,8 +64,8 @@ class Game {
     for (PlayField playField : playFields) {
       playField.clear();
     }
-    ColorSequence colors = new RandomColorSequence(0);
-    Random radiusRandom = new Random(0);
+    ColorSequence colors = Config.deterministic ? new RandomColorSequence(0) : new RandomColorSequence();
+    Random radiusRandom = Config.deterministic ? new Random(0) : new Random();
     int y = 0;
     for (int i = 0; i < 10; i++) {
       Disk d = new Disk();

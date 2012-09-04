@@ -86,17 +86,9 @@ public class P2 {
     return new P2(v);
   }
 
-  public static P2 random() {
-    return random(new Random());
-  }
-
   public static P2 random(Random r) {
     float angle = r.nextFloat() * 2 * (float) Math.PI;
     return new P2((float) Math.cos(angle), (float) Math.sin(angle));
-  }
-
-  public static P2 random(float scale) {
-    return random(scale, new Random());
   }
 
   public static P2 random(float scale, Random r) {

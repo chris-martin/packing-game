@@ -210,13 +210,11 @@ class Disks implements DragHandler {
   }
 
   void circumscribe() {
-    new Runnable() {
+    new Object() {
 
       Circle x = new Circle();
-      Random r = new Random(0);
-
-      public void run() {
-
+      Random r = Config.deterministic ? new Random(0) : new Random();
+      {
         x.center = new P2(200, 200);
         x.radius = enclosing_radius(x.center);
         for (float step_size = 100; step_size > 0; step_size -= .2) { try_shift(step_size); }
@@ -232,7 +230,7 @@ class Disks implements DragHandler {
         }
       }
 
-    }.run();
+    };
   }
 
   void pack() {
