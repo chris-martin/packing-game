@@ -72,4 +72,12 @@ public class PAppletCanvas extends BaseCanvas {
     applet.text(text, position.x, position.y);
   }
 
+  @Override
+  public void line(P2 a, P2 b, Color color, float thickness) {
+    stroke(color);
+    stroke(thickness);
+    applet.strokeCap(PApplet.SQUARE);
+    applet.line(a.x, a.y, b.x, b.y);
+  }
+
 }

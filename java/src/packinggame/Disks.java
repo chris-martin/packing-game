@@ -63,6 +63,7 @@ class Disks implements DragHandler {
   @Override public void press(P2 mouse) {
     dragging_disk = at_position(mouse);
     if (dragging_disk != null) {
+      dragging_disk.highlight = true;
       dragging_disk_start = dragging_disk.circle.center;
       stationary_disks.remove(dragging_disk);
       overlap_boundaries = Circle.expanded(
@@ -96,6 +97,7 @@ class Disks implements DragHandler {
         dragging_disk.circle.center = dragging_disk_start;
       }
 
+      dragging_disk.highlight = false;
       stationary_disks.add(dragging_disk);
       dragging_disk = null;
       dragging_disk_start = null;

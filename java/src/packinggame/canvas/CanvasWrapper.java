@@ -50,4 +50,9 @@ public class CanvasWrapper extends BaseCanvas {
     return canvas.subsection(position, size);
   }
 
+  @Override
+  public void line(P2 a, P2 b, Color color, float thickness) {
+    canvas.line(a, b, color, thickness);
+  }
+
 }

@@ -1,5 +1,7 @@
 package packinggame.canvas;
 
+import java.awt.*;
+
 public class ShiftedCanvas extends CanvasWrapper {
 
   final P2 shift;
@@ -29,6 +31,11 @@ public class ShiftedCanvas extends CanvasWrapper {
   @Override
   public void text(String text, H_align align, P2 position) {
     super.text(text, align, position.add(shift));
+  }
+
+  @Override
+  public void line(P2 a, P2 b, Color color, float thickness) {
+    super.line(a.add(shift), b.add(shift), color, thickness);
   }
 
 }

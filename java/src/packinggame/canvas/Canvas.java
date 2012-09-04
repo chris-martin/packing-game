@@ -26,6 +26,8 @@ public interface Canvas {
 
   void rectangle(P2 position, P2 size);
 
+  void line(P2 a, P2 b, Color color, float thickness);
+
   IntSize size();
 
   Canvas subsection(P2 position, IntSize size);
