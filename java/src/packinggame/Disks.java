@@ -198,7 +198,10 @@ class Disks implements DragHandler {
     class X {
       float radius = 0;
       void consider(Disk d) {
-        radius = Math.max(radius, center.dist(d.circle.center) + d.circle.radius);
+        Circle circle = d.circle;
+        if (circle != null && circle.center != null) {
+          radius = Math.max(radius, center.dist(circle.center) + circle.radius);
+        }
       }
     }
     X x = new X();

@@ -47,4 +47,21 @@ class PlayField {
     }
   }
 
+  void line_up_disks() {
+    float y = 0;
+    for (Disk d : disks.stationary_disks) {
+      y += d.circle.radius;
+    }
+    y = get_canvas().size().y / 2.f - y;
+    for (Disk d : disks.stationary_disks) {
+      d.circle.center = new P2(
+        side == Side.left ? 50 : get_canvas().size().x - 50,
+        y + d.circle.radius
+      );
+      y += 2 * d.circle.radius;
+    }
+    disks.circumscribe();
+    disks.loop_request.loop(true);
+  }
+
 }

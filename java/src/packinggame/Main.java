@@ -8,6 +8,8 @@ import packinggame.loop.Looping;
 import packinggame.mouse.MouseManager;
 import processing.core.PApplet;
 
+import java.awt.event.KeyEvent;
+
 public class Main extends PApplet {
 
   public static void main(String[] args) {
@@ -52,6 +54,18 @@ public class Main extends PApplet {
 
   @Override public void mouseDragged() {
     mouse_manager.drag();
+  }
+
+  @Override
+  public void keyPressed(KeyEvent keyEvent) {
+    switch (keyEvent.getKeyChar()) {
+      case 'c':
+        game.playFields.get(1).disks.pack();
+        break;
+      case 'r':
+        game.line_up_disks();
+        break;
+    }
   }
 
   @Override public void draw() {
