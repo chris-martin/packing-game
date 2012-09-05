@@ -6,57 +6,56 @@
 % - An outline of how you compute (or plan to compute) the minimal containing disk
 % - A screen shot of your app showing disks and the container
 % - References (papers, URLs) that you found useful
-
-\documentclass[11pt]{article}
-\usepackage[margin=0.5in]{geometry}
+\documentclass[10pt,twocolumn]{article}
+\usepackage{fullpage}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{caption}
-\usepackage{subcaption}
-\date{}
+
+\RequirePackage[caption=false,position=top]{subfig}
+\let\subtop\subfloat
 
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 
+\title{
+\vspace{-60pt}
+CS 6491 - Project 1 - Packing Game
+\vspace{-20pt}
+}
+\date{}
+
 \begin{document}
 
-{\Huge \bf CS 6491 - Project 1 - Part A: Packing Game}
-\thispagestyle{empty}
+\maketitle
 
-\begin{figure}[h]
-  \begin{subfigure}[b]{0.24\textwidth}
-    \centering
-    \includegraphics[width=100pt]{gaurav}
-    \caption*{Gaurav Dhage\\gr8dhage@gmail.com}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.24\textwidth}
-    \centering
-    \includegraphics[width=100pt]{anshul}
-    \caption*{Anshul Bhatnagar\\anshul.bhatnagar@gatech.edu}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.24\textwidth}
-    \centering
-    \includegraphics[width=100pt]{suraj}
-    \caption*{Suraj Sirpilli@gatech.edu\\surajsirpilli@gatech.edu}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.24\textwidth}
-    \centering
-    \includegraphics[width=100pt]{chris}
-    \caption*{Chris Martin\\chris.martin@gatech.edu}
-  \end{subfigure}
-\end{figure}
+  \newcommand\photo[3]{
+    \parbox[r]{0.4\linewidth}{
+      \centering
+      \includegraphics[width=80pt]{../team/#1}
+      \\\textbf{#2}\\\texttt{\small#3}
+    }
+  }
+  \photo{gaurav}{Gaurav Dhage}{gr8dhage\\@gmail.com}
+  \photo{anshul}{Anshul Bhatnagar}{anshul.bhatnagar\\@gatech.edu}
+
+  \photo{suraj}{Suraj Sirpilli}{surajsirpilli\\@gatech.edu}
+  \photo{chris}{Chris Martin}{chris.martin\\@gatech.edu}
 
 \section{Abstract}
 
-The aim of this project is to create a two-player game in which
-each player moves disks with the goal of packing them into the
-smallest possible circle.
+We implemented a two-player game in which players arrange a collection
+of non-overlapping disks on a plane with the objective of minimizing
+the size of their minimum enclosing circle.
+The game can be played either between two humans or against the computer.
 
 \section{Progress}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-\includegraphics[scale=0.25]{screenshot.png}
-\end{wrapfigure}
+{\centering
+
+\includegraphics[scale=0.2]{screenshot.png}
+
+}
 
 This phase of the project exhibits the ability to drag disks
 using the mouse with collision detection, and compute the
@@ -88,7 +87,7 @@ and use it to shift the center if it results in an improvement.
 
 \begin{itemize}
 
-\item Bourke, Paul. {\it Intersection of two circles}.
+\item Bourke, Paul. \textit{Intersection of two circles}.
 \url{http://paulbourke.net/geometry/2circle/}
 
 \end{itemize}
