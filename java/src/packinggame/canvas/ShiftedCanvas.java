@@ -1,5 +1,7 @@
 package packinggame.canvas;
 
+import processing.core.PImage;
+
 import java.awt.*;
 
 public class ShiftedCanvas extends CanvasWrapper {
@@ -19,8 +21,13 @@ public class ShiftedCanvas extends CanvasWrapper {
   }
 
   @Override
-  public void rectangle(P2 position, P2 size) {
-    super.rectangle(position.add(shift), size);
+  public void rectangle(P2 position, P2 size, Color fill, Color stroke, float strokeWeight, float round) {
+    super.rectangle(position.add(shift), size, fill, stroke, strokeWeight, round);
+  }
+
+  @Override
+  public void image(PImage image, P2 p, P2 size) {
+    super.image(image, p.add(shift), size);
   }
 
   @Override
@@ -29,8 +36,8 @@ public class ShiftedCanvas extends CanvasWrapper {
   }
 
   @Override
-  public void text(String text, H_align align, P2 position) {
-    super.text(text, align, position.add(shift));
+  public void text(String text, Color color, float size, H_align align, P2 position) {
+    super.text(text, color, size, align, position.add(shift));
   }
 
   @Override

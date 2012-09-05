@@ -2,6 +2,7 @@ package packinggame.canvas;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PImage;
 
 import java.awt.*;
 
@@ -53,21 +54,28 @@ public class PAppletCanvas extends BaseCanvas {
   }
 
   @Override
-  public void rectangle(P2 position, P2 size) {
-    stroke(0);
-    applet.rect(position.x, position.y, size.x, size.y);
+  public void rectangle(P2 position, P2 size, Color fill, Color stroke, float strokeWeight, float round) {
+    fill(fill);
+    stroke(stroke);
+    stroke(strokeWeight);
+    applet.rect(position.x, position.y, size.x, size.y, round, round, round, round);
   }
 
   @Override
-  public void text(String text, H_align align, P2 position) {
+  public void image(PImage image, P2 p, P2 size) {
+    applet.image(image, p.x, p.y, size.x, size.y);
+  }
+
+  @Override
+  public void text(String text, Color color, float size, H_align align, P2 position) {
     int align_int;
     switch (align) {
       case left: align_int = PApplet.LEFT; break;
       case right: align_int = PApplet.RIGHT; break;
       default: align_int = PApplet.CENTER;
     }
-    applet.textSize(36);
-    fill(Color.black);
+    fill(color);
+    applet.textSize(size);
     applet.textAlign(align_int);
     applet.text(text, position.x, position.y);
   }

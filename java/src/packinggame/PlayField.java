@@ -4,6 +4,7 @@ import packinggame.canvas.Canvas;
 import packinggame.canvas.P2;
 import packinggame.loop.LoopRequest;
 
+import java.awt.*;
 import java.io.PipedWriter;
 
 class PlayField {
@@ -38,12 +39,12 @@ class PlayField {
 
     Circle mec = disks.circumscribing_circle;
     if (mec != null) {
-      P2 p = new P2(20, 50);
+      P2 p = new P2(50, 100);
       if (side == Side.left) {
         p = p.x(canvas.size().x - p.x);
       }
       Canvas.H_align align = side == Side.left ? Canvas.H_align.right : Canvas.H_align.left;
-      canvas.text(Integer.toString((int) mec.radius), align, p);
+      canvas.text(Integer.toString((int) mec.radius), new Color(0, 0, 0, 120), 88, align, p);
     }
   }
 

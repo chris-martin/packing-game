@@ -1,5 +1,7 @@
 package packinggame.canvas;
 
+import processing.core.PImage;
+
 import java.awt.*;
 
 public class CanvasWrapper extends BaseCanvas {
@@ -31,8 +33,13 @@ public class CanvasWrapper extends BaseCanvas {
   }
 
   @Override
-  public void rectangle(P2 position, P2 size) {
-    canvas.rectangle(position, size);
+  public void rectangle(P2 position, P2 size, Color fill, Color stroke, float strokeWeight, float round) {
+    canvas.rectangle(position, size, fill, stroke, strokeWeight, round);
+  }
+
+  @Override
+  public void image(PImage image, P2 p, P2 size) {
+    canvas.image(image, p, size);
   }
 
   @Override
@@ -41,8 +48,8 @@ public class CanvasWrapper extends BaseCanvas {
   }
 
   @Override
-  public void text(String text, H_align align, P2 position) {
-    canvas.text(text, align, position);
+  public void text(String text, Color color, float size, H_align align, P2 position) {
+    canvas.text(text, color, size, align, position);
   }
 
   @Override

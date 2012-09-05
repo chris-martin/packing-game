@@ -38,6 +38,9 @@
     <mkdir dir="${classes.dir}"/>
 
     <echo message="${ant.project.name} : ${ant.file}"/>
+    <copy todir="${classes.dir}/packinggame/info">
+      <fileset file="${src.dir}/../../team/*.jpg"/>
+    </copy>
     <javac srcdir="${src.dir}" includes="**" encoding="utf-8"
            destdir="${classes.dir}" source="${source}" target="${target}"
            debug="true" debuglevel="${debug.level}"

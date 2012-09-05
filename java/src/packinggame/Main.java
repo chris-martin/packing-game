@@ -2,18 +2,29 @@ package packinggame;
 
 import packinggame.canvas.Canvas;
 import packinggame.canvas.IntSize;
+import packinggame.canvas.P2;
 import packinggame.canvas.PAppletCanvas;
+import packinggame.info.Info;
+import packinggame.loop.LoopRequest;
 import packinggame.loop.LoopRequestAggregator;
 import packinggame.loop.Looping;
 import packinggame.mouse.MouseManager;
 import processing.core.PApplet;
+import processing.core.PImage;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Main extends PApplet {
 
   public static void main(String[] args) {
     PApplet.main(new String[]{ "packinggame.Main" });
+  }
+
+  static Main instance;
+  { instance = this; }
+  public static PImage loadImageMT_(Image image) {
+    return instance.loadImageMT(image);
   }
 
   static IntSize canvas_size() {
@@ -26,7 +37,8 @@ public class Main extends PApplet {
 
   Game game = new Game();
   MouseManager mouse_manager = new MouseManager(this);
-  LoopRequestAggregator loop_request = Looping.aggregator(Looping.papplet(this));
+  LoopRequestAggregator loop_request_aggregator = Looping.aggregator(Looping.papplet(this));
+  LoopRequest loop_request = loop_request_aggregator.newLoopRequest();
   Canvas canvas = new PAppletCanvas(this) {
     @Override
     public IntSize size() {
@@ -34,24 +46,30 @@ public class Main extends PApplet {
     }
   };
 
+  Info info;
+  {
+    IntSize size = new IntSize((int) (canvas_size.x * 0.7), (int) (canvas_size.y * 0.8));
+    P2 position = new P2((canvas_size.x - size.x) / 2, (canvas_size.y - size.y) / 2);
+    info = new Info(canvas.subsection(position, size));
+  }
+  boolean show_info;
+
   @Override public void setup() {
     size(canvas_size.x, canvas_size.y);
     smooth();
 
     mouse_manager.add(game.drag_handler);
-    game.set_loop_request(loop_request.newLoopRequest());
+    game.set_loop_request(loop_request_aggregator.newLoopRequest());
     game.set_canvas(canvas);
     game.start();
   }
 
   @Override public void mousePressed() {
     mouse_manager.press();
-    noCursor();
   }
 
   @Override public void mouseReleased() {
     mouse_manager.release();
-    cursor();
   }
 
   @Override public void mouseDragged() {
@@ -70,11 +88,25 @@ public class Main extends PApplet {
       case 'g':
         game.start();
         break;
+      case ' ':
+        show_info = !show_info;
     }
+    loop_request.loop(true);
   }
 
   @Override public void draw() {
+    loop_request.loop(false);
     game.draw();
+    P2 rect_size = new P2(400, 45);
+    P2 rect_position = new P2(canvas_size.x / 2f - rect_size.x / 2f, canvas_size.y - rect_size.y - 5);
+    if (show_info) {
+      canvas.rectangle(new P2(0, 0), new P2(canvas_size.x, canvas_size.y), new Color(0, 0, 0, 128), new Color(0, 0, 0, 0), 0, 0);
+      info.draw();
+    }
+    canvas.rectangle(rect_position, rect_size, new Color(255, 255, 255, 100), new Color(255, 255, 255, 80), 2, 10);
+    canvas.text("Press spacebar to " + (show_info ? "hide" : "show") + " information.",
+      Color.black, 20, Canvas.H_align.center,
+      new P2(canvas_size.x / 2f, canvas_size.y - 20f));
   }
 
 }
