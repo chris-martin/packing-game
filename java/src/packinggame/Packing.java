@@ -48,7 +48,7 @@ class Packing {
 
     float min_radius = radii.size() == 0 ? 0 : Math.max(
       // the area of the MEC is at least the sum of the disks' areas
-      (float) (Math.sqrt(area_sum()) / Math.PI),
+      (float) (Math.sqrt(area_sum() / Math.PI)),
       // the radius of the MEC is at least the sum of the first two disks' radii
       desc.size() == 1 ? desc.get(0) : desc.get(0) + desc.get(1)
     );

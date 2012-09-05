@@ -71,7 +71,7 @@ class Game {
     float y = 0;
     while (true) {
       Disk d = new Disk();
-      d.circle.radius = 15 + 40 * radiusRandom.nextFloat();
+      d.circle.radius = 5 + 60 * radiusRandom.nextFloat();
       y += 2 * d.circle.radius;
       if (y > canvas.size().y) {
         break;
