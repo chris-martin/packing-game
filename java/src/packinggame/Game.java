@@ -19,6 +19,7 @@ import static com.google.common.collect.Lists.newArrayList;
 class Game {
 
   final CompositeDragHandler drag_handler = new CompositeDragHandler();
+  Canvas canvas;
 
   List<PlayField> playFields = newArrayList();
   {
@@ -37,6 +38,7 @@ class Game {
   }
 
   void set_canvas(Canvas canvas) {
+    this.canvas = canvas;
     IntSize canvasSize = canvas.size();
     int height = canvasSize.y;
     int split = canvasSize.x / 2;
@@ -66,10 +68,15 @@ class Game {
     }
     ColorSequence colors = Config.deterministic ? new RandomColorSequence(0) : new RandomColorSequence();
     Random radiusRandom = Config.deterministic ? new Random(0) : new Random();
-    for (int i = 0; i < 10; i++) {
+    float y = 0;
+    while (true) {
       Disk d = new Disk();
+      d.circle.radius = 15 + 40 * radiusRandom.nextFloat();
+      y += 2 * d.circle.radius;
+      if (y > canvas.size().y) {
+        break;
+      }
       d.color = colors.next();
-      d.circle.radius = 10 + radiusRandom.nextInt(40);
       for (PlayField playField : playFields) {
         playField.disks.add(d.copy());
       }

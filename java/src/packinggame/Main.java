@@ -46,10 +46,12 @@ public class Main extends PApplet {
 
   @Override public void mousePressed() {
     mouse_manager.press();
+    noCursor();
   }
 
   @Override public void mouseReleased() {
     mouse_manager.release();
+    cursor();
   }
 
   @Override public void mouseDragged() {
@@ -65,13 +67,13 @@ public class Main extends PApplet {
       case 'r':
         game.line_up_disks();
         break;
+      case 'g':
+        game.start();
+        break;
     }
   }
 
   @Override public void draw() {
-    colorMode(HSB, 255, 100, 100);
-    background(150, 10, 95);
-    fill(0, 0, 0);
     game.draw();
   }
 

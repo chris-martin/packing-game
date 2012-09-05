@@ -43,7 +43,7 @@ class Disks implements DragHandler {
 
   void draw() {
 
-    canvas.circle(circumscribing_circle.center, circumscribing_circle.radius, new Color(255, 255, 255, 127));
+    canvas.circle(circumscribing_circle.center, circumscribing_circle.radius, new Color(255, 255, 255, 200));
 
     for (Disk d : stationary_disks) {
       d.draw(canvas);

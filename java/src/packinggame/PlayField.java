@@ -49,16 +49,18 @@ class PlayField {
 
   void line_up_disks() {
     float y = 0;
+    float max_r = 0;
     for (Disk d : disks.stationary_disks) {
-      y += d.circle.radius;
+      float r = d.circle.radius;
+      y += r;
+      max_r = Math.max(max_r, r);
     }
     y = get_canvas().size().y / 2.f - y;
+    float x = side == Side.left ? max_r : get_canvas().size().x - max_r;
     for (Disk d : disks.stationary_disks) {
-      d.circle.center = new P2(
-        side == Side.left ? 50 : get_canvas().size().x - 50,
-        y + d.circle.radius
-      );
-      y += 2 * d.circle.radius;
+      float r = d.circle.radius;
+      d.circle.center = new P2(x, y + r);
+      y += 2 * r;
     }
     disks.circumscribe();
     disks.loop_request.loop(true);
