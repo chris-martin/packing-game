@@ -41,6 +41,9 @@
     <copy todir="${classes.dir}/packinggame/info">
       <fileset file="${src.dir}/../../team/*.jpg"/>
     </copy>
+    <copy todir="${classes.dir}/packinggame">
+      <fileset file="${src.dir}/disks.txt"/>
+    </copy>
     <javac srcdir="${src.dir}" includes="**" encoding="utf-8"
            destdir="${classes.dir}" source="${source}" target="${target}"
            debug="true" debuglevel="${debug.level}"

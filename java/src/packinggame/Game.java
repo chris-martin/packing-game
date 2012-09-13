@@ -63,19 +63,29 @@ class Game {
   }
 
   void start() {
+      List<Float> radii = newArrayList();
+      Random radiusRandom = Config.deterministic ? new Random(0) : new Random();
+      float y = 0;
+      while (true) {
+          float r = 5 + 60 * radiusRandom.nextFloat();
+          y += 2 * r;
+          if (y > canvas.size().y) {
+            break;
+          }
+          radii.add(r);
+      }
+      start(radii);
+  }
+
+  void start(List<Float> radii) {
     for (PlayField playField : playFields) {
       playField.clear();
     }
     ColorSequence colors = Config.deterministic ? new RandomColorSequence(0) : new RandomColorSequence();
-    Random radiusRandom = Config.deterministic ? new Random(0) : new Random();
-    float y = 0;
-    while (true) {
+
+    for (float r : radii) {
       Disk d = new Disk();
-      d.circle.radius = 5 + 60 * radiusRandom.nextFloat();
-      y += 2 * d.circle.radius;
-      if (y > canvas.size().y) {
-        break;
-      }
+      d.circle.radius = r;
       d.color = colors.next();
       for (PlayField playField : playFields) {
         playField.disks.add(d.copy());

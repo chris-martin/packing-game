@@ -70,7 +70,7 @@ class Packing {
   }
 
   List<P2> pack(float enclosing_radius) {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1000; i++) {
       List<Circle> circles = circles(),
         permutation = newArrayList(circles);
       Collections.shuffle(permutation, Config.deterministic ? new Random(i) : new Random());

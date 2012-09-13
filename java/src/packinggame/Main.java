@@ -1,5 +1,9 @@
 package packinggame;
 
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.io.CharStreams;
 import packinggame.canvas.Canvas;
 import packinggame.canvas.IntSize;
 import packinggame.canvas.P2;
@@ -11,9 +15,13 @@ import packinggame.loop.Looping;
 import packinggame.mouse.MouseManager;
 import processing.core.PApplet;
 import processing.core.PImage;
-
+import java.util.List;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class Main extends PApplet {
 
@@ -54,6 +62,28 @@ public class Main extends PApplet {
   }
   boolean show_info;
 
+  List<Float> radii() {
+      List<String> lines;
+      try {
+          String x = CharStreams.toString(new InputStreamReader(Main.class.getResourceAsStream("disks.txt")));
+          lines = newArrayList();
+          for (String line : Splitter.on("\n").split(x)) {
+              line = line.trim();
+              if (line.length() != 0) {
+                lines.add(line);
+              }
+          }
+      } catch (IOException e) {
+          return ImmutableList.of();
+      }
+      List<Float> radii = newArrayList();
+      Integer n = Integer.parseInt(lines.get(0));
+      for (int i = 1; i <= n; i++) {
+          radii.add(Float.parseFloat(lines.get(i)));
+      }
+      return radii;
+  }
+
   @Override public void setup() {
     size(canvas_size.x, canvas_size.y);
     smooth();
@@ -61,7 +91,7 @@ public class Main extends PApplet {
     mouse_manager.add(game.drag_handler);
     game.set_loop_request(loop_request_aggregator.newLoopRequest());
     game.set_canvas(canvas);
-    game.start();
+    game.start(radii());
   }
 
   @Override public void mousePressed() {

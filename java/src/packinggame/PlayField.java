@@ -44,7 +44,7 @@ class PlayField {
         p = p.x(canvas.size().x - p.x);
       }
       Canvas.H_align align = side == Side.left ? Canvas.H_align.right : Canvas.H_align.left;
-      canvas.text(Integer.toString((int) mec.radius), new Color(0, 0, 0, 120), 88, align, p);
+      canvas.text(String.format("%.3f", mec.radius), new Color(0, 0, 0, 120), 88, align, p);
     }
   }
 
