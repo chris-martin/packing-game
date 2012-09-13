@@ -92,6 +92,7 @@ public class Main extends PApplet {
     game.set_loop_request(loop_request_aggregator.newLoopRequest());
     game.set_canvas(canvas);
     game.start(radii());
+    game.playFields.get(1).disks.pack();
   }
 
   @Override public void mousePressed() {
